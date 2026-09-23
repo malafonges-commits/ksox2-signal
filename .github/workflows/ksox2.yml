@@ -3,9 +3,7 @@ name: Update K-SOX2 signal
 on:
   workflow_dispatch:
   schedule:
-    # 17:00 KST = 08:00 UTC. Weekdays only.
-    # Korean holidays may still trigger; the script simply reuses the latest finalized KRX bar.
-    - cron: "0 8 * * 1-5"
+    - cron: "0 8 * * 1-5"  # 17:00 KST
 
 permissions:
   contents: write
@@ -16,12 +14,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
-          python-version: "3.12"
+          python-version: "3.13"
           cache: "pip"
 
       - name: Install dependencies
@@ -29,15 +27,14 @@ jobs:
 
       - name: Calculate K-SOX2 signal
         env:
-          KRX_ID: ${{ secrets.KRX_ID }}
-          KRX_PW: ${{ secrets.KRX_PW }}
+          KRX_AUTH_KEY: ${{ secrets.KRX_AUTH_KEY }}
         run: python ksox2.py
 
-      - name: Commit updated signal
+      - name: Commit updated signal and cached history
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ksox2_signal.json ksox2_history.csv
+          git add ksox2_signal.json ksox2_history.csv ksox2_prices.csv
           if git diff --cached --quiet; then
             echo "No data change."
           else
