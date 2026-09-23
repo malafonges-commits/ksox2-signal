@@ -28,6 +28,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Calculate K-SOX2 signal
+        env:
+          KRX_ID: ${{ secrets.KRX_ID }}
+          KRX_PW: ${{ secrets.KRX_PW }}
         run: python ksox2.py
 
       - name: Commit updated signal
