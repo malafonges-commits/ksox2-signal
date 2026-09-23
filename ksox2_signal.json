@@ -1,0 +1,41 @@
+{
+  "ticker": "423920",
+  "strategy": "SMA260 +/-5% hysteresis",
+  "generated_at_kst": "2026-09-23T19:35:17+09:00",
+  "status": "OK",
+  "data_source": "KRX OPEN API / ETF daily trading information",
+  "api_id": "etf_bydd_trd",
+  "price_basis": "Official KRX market close. API does not expose a separate adjusted-close field; signal is blocked if a split/reverse-split-like discontinuity is detected.",
+  "corporate_action_guard": "block if consecutive close ratio >=1.80 or <=0.55",
+  "data_rows": 1084,
+  "latest_finalized_date": "2026-09-22",
+  "close": 86345.0,
+  "sma260": 68869.57692307692,
+  "upper_5pct": 72313.05576923078,
+  "lower_5pct": 65426.098076923074,
+  "close_vs_sma_pct": 25.374663033638267,
+  "close_vs_upper_pct": 19.40444098441738,
+  "close_vs_lower_pct": 31.973329509092927,
+  "previous_state": "LONG",
+  "state": "LONG",
+  "signal": "NONE",
+  "action": "LONG_HOLD",
+  "recent_buy_transition": {
+    "date": "2025-07-10",
+    "close": 24065.0,
+    "sma260": 22868.55769230769,
+    "upper_5pct": 24011.985576923078
+  },
+  "recent_sell_transition": {
+    "date": "2025-02-26",
+    "close": 22845.0,
+    "sma260": 24375.634615384617,
+    "lower_5pct": 23156.852884615386
+  },
+  "rules": {
+    "buy": "CASH and close > SMA260 * 1.05",
+    "sell": "LONG and close < SMA260 * 0.95",
+    "inside_band": "preserve previous state",
+    "execution": "next KRX regular-session open"
+  }
+}
