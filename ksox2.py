@@ -106,9 +106,17 @@ def request_etf_day(session: requests.Session, auth_key: str, d: date) -> dict |
 
             for row in rows:
                 code = str(row.get("ISU_CD", "")).strip()
-                if code == TICKER or code.endswith(TICKER):
-                    close = clean_number(row.get("TDD_CLSPRC"))
-                    raw_date = str(row.get("BAS_DD", "")).strip()
+if code == TICKER or code.endswith(TICKER):
+    raw_close = row.get("TDD_CLSPRC")
+
+    # KRX 휴장일에는 종가가 빈 문자열/“-”로 반환될 수 있음
+    close_text = str(raw_close or "").replace(",", "").strip()
+    if close_text in {"", "-", "0"}:
+        return None
+
+    close = clean_number(raw_close)
+
+    raw_date = str(row.get("BAS_DD", "")).strip()
                     parsed_date = pd.to_datetime(raw_date, errors="coerce")
                     actual_date = d if pd.isna(parsed_date) else parsed_date.date()
                     return {"date": actual_date, "close": close}
