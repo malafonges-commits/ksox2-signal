@@ -1,0 +1,43 @@
+name: Update K-SOX2 signal
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 17:00 KST = 08:00 UTC. Weekdays only.
+    # Korean holidays may still trigger; the script simply reuses the latest finalized KRX bar.
+    - cron: "0 8 * * 1-5"
+
+permissions:
+  contents: write
+
+jobs:
+  update-signal:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Calculate K-SOX2 signal
+        run: python ksox2.py
+
+      - name: Commit updated signal
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ksox2_signal.json ksox2_history.csv
+          if git diff --cached --quiet; then
+            echo "No data change."
+          else
+            git commit -m "Update K-SOX2 signal"
+            git push
+          fi
