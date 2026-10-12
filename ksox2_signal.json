@@ -1,7 +1,7 @@
 {
   "ticker": "423920",
   "strategy": "SMA260 +/-5% hysteresis",
-  "generated_at_kst": "2026-10-09T23:49:15+09:00",
+  "generated_at_kst": "2026-10-13T02:10:10+09:00",
   "status": "OK",
   "data_source": "KRX OPEN API / ETF daily trading information",
   "api_id": "etf_bydd_trd",
